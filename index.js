@@ -24,6 +24,10 @@ client.connect((err) => {
     .db(`${process.env.DB_DATA_BASE}`)
     .collection(`${process.env.DB_PRODUCT}`);
 
+  const orderCollection = client
+    .db(`${process.env.DB_DATA_BASE}`)
+    .collection(`oderList`);
+
   app.post("/addProduct", (req, res) => {
     const products = req.body;
     productCollection.insertOne(products).then((result) => {
@@ -45,12 +49,23 @@ client.connect((err) => {
       });
   });
 
-  app.post('productByKeys', (req,res)=>{
-      const productKeys= req.body;
-      productCollection.find({key: {$in: productKeys.toArray((req,res)=>{
-          res.send(documents)
-      })}})
-  })
+  app.post("productByKeys", (req, res) => {
+    const productKeys = req.body;
+    productCollection.find({
+      key: {
+        $in: productKeys.toArray((req, res) => {
+          res.send(documents);
+        }),
+      },
+    });
+  });
+
+  app.post("/addOrder", (req, res) => {
+    const order = req.body;
+    orderCollection.insertOne(order).then((result) => {
+      res.send(result.insertedCount >0);
+    });
+  });
 });
 
 app.listen(port);
