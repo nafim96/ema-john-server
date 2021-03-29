@@ -49,7 +49,7 @@ client.connect((err) => {
       });
   });
 
-  app.post("productByKeys", (req, res) => {
+  app.post("/productByKeys", (req, res) => {
     const productKeys = req.body;
     productCollection.find({
       key: {
