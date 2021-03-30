@@ -49,15 +49,13 @@ client.connect((err) => {
       });
   });
 
-  app.post("/productByKeys", (req, res) => {
+  app.post("/productsByKeys", (req, res) => {
     const productKeys = req.body;
-    productCollection.find({
-      key: {
-        $in: productKeys.toArray((req, res) => {
-          res.send(documents);
-        }),
-      },
-    });
+    productCollection
+      .find({ key: { $in: productKeys } })
+      .toArray((err, documents) => {
+        res.send(documents);
+      });
   });
 
   app.post("/addOrder", (req, res) => {
