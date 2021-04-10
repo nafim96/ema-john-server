@@ -36,7 +36,8 @@ client.connect((err) => {
   });
 
   app.get("/product", (req, res) => {
-    productCollection.find({}).toArray((err, documents) => {
+    const search= req.query.search
+    productCollection.find({name:{$regex:search}}).toArray((err, documents) => {
       res.send(documents);
     });
   });
@@ -49,6 +50,7 @@ client.connect((err) => {
       });
   });
 
+  // for check out 
   app.post("/productsByKeys", (req, res) => {
     const productKeys = req.body;
     productCollection
@@ -58,6 +60,7 @@ client.connect((err) => {
       });
   });
 
+  // send order database 
   app.post("/addOrder", (req, res) => {
     const order = req.body;
     orderCollection.insertOne(order).then((result) => {
